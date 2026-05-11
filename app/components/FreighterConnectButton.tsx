@@ -1,39 +1,30 @@
 "use client";
 
 import { Button, HStack, Text } from "@chakra-ui/react";
-import { useState } from "react";
-import { connectFreighter } from "../lib/freighter";
+import { useState, useEffect } from "react";
+import { useToDoContract } from "@/app/context/ToDoContractContext";
 import { DialogBox } from "./Daialog";
 
 const FreighterConnectButton = () => {
-  const [publicKey, setPublicKey] = useState<string | null>(null);
-  const [isConnecting, setIsConnecting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { connected, address, error, connect, loading } = useToDoContract();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleConnect = async () => {
-    setIsConnecting(true);
-    setError(null);
-
-    try {
-      const key = await connectFreighter();
-      console.log("Connection successful, key:", key);
-      setPublicKey(key);
-    } catch (err) {
-      console.error("Connection error:", err);
-      const message = err instanceof Error ? err.message : "Failed to connect.";
-      setError(message);
+  // Show dialog when error occurs
+  useEffect(() => {
+    if (error) {
       setIsDialogOpen(true);
-    } finally {
-      setIsConnecting(false);
     }
+  }, [error]);
+
+  const handleConnect = async () => {
+    await connect();
   };
 
   return (
     <HStack gap={3} align="center">
       <DialogBox
         title="Freighter connection failed"
-        desc={`${error}`}
+        desc={error || "Failed to connect"}
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
       />
@@ -41,15 +32,15 @@ const FreighterConnectButton = () => {
         colorScheme="teal"
         size="sm"
         onClick={handleConnect}
-        loading={isConnecting}
+        loading={loading}
         loadingText="Connecting"
-        disabled={Boolean(publicKey)}
+        disabled={connected}
       >
-        {publicKey ? "Freighter Connected" : "Connect Freighter"}
+        {connected ? "Freighter Connected" : "Connect Freighter"}
       </Button>
-      {publicKey && (
+      {address && (
         <Text fontSize="sm" color="gray.500">
-          {publicKey.slice(0, 5)}...{publicKey.slice(-4)}
+          {address.slice(0, 5)}...{address.slice(-4)}
         </Text>
       )}
     </HStack>

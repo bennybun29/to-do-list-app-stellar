@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Provider } from "@/components/ui/provider";
 import { Poppins } from "next/font/google";
+import { ToDoContractProvider } from "./context/ToDoContractContext";
+import GlobalWave from "./components/GlobalWave";
 
 export const metadata: Metadata = {
   title: "To Do App",
@@ -20,7 +22,10 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body className={poppins.className}>
-        <Provider>{children}</Provider>
+        <ToDoContractProvider>
+          <Provider>{children}</Provider>
+          <GlobalWave />
+        </ToDoContractProvider>
       </body>
     </html>
   );

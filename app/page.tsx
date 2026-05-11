@@ -1,20 +1,41 @@
-import { Box, Container, HStack, Heading } from "@chakra-ui/react";
+"use client";
+
+import {
+  Box,
+  Container,
+  HStack,
+  Heading,
+  Button,
+  VStack,
+  Center,
+} from "@chakra-ui/react";
 import ColorButton from "./components/ColorButton";
 import FreighterConnectButton from "./components/FreighterConnectButton";
+import NextLink from "next/link";
+import Image from "next/image";
+import { LogoImage } from "./components/LogoImage";
+import { useToDoContract } from "@/app/context/ToDoContractContext";
 
 export default function Home() {
+  const { connected } = useToDoContract();
+
   return (
-    <Container>
-      <HStack p={10} justify="space-between">
+    <Center h="100vh" flexDirection="column">
+      <VStack p={10} gap={5} justify="space-between">
+        <LogoImage />
         <Heading>Welcome to StellarDo!</Heading>
-        <HStack gap={3}>
+        <HStack my={3}>
           <FreighterConnectButton />
           <ColorButton />
         </HStack>
-      </HStack>
-      <Box textAlign="center" p={10}>
-        Decentralized To Do List App for You!
-      </Box>
-    </Container>
+        {connected && (
+          <NextLink href="/dashboard">
+            <Button bg="yellow.500" size="lg" _hover={{ bg: "yellow.600" }}>
+              Go to Dashboard
+            </Button>
+          </NextLink>
+        )}
+      </VStack>
+    </Center>
   );
 }

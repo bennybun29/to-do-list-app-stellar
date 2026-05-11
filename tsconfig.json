@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "to_do_list": ["./packages/to_do_list"],
+      "to_do_list/*": ["./packages/to_do_list/*"]
     }
   },
   "include": [

@@ -1,4 +1,5 @@
 import * as freighter from "@stellar/freighter-api";
+import { Client, networks } from "to_do_list";
 
 const ensureBrowser = () => {
   if (typeof window === "undefined") {
@@ -70,3 +71,71 @@ export const connectFreighter = async () => {
     throw err;
   }
 };
+
+export async function initializeToDoContract() {
+  ensureBrowser();
+
+  // Timeout wrapper for freighter calls
+  const withTimeout = <T>(promise: Promise<T>, ms: number = 3000) => {
+    return Promise.race([
+      promise,
+      new Promise<T>((_, reject) =>
+        setTimeout(() => reject(new Error("Freighter request timed out")), ms),
+      ),
+    ]);
+  };
+
+  try {
+    // First check if Freighter is installed with timeout
+    await withTimeout(freighter.requestAccess(), 3000);
+  } catch (e) {
+    console.error("Request access failed:", e);
+    throw new Error(
+      "Freighter wallet extension not found or not responding. Please install the Freighter wallet extension.",
+    );
+  }
+
+  try {
+    const addressResult = (await withTimeout(freighter.getAddress(), 3000)) as {
+      address: string;
+    };
+
+    const { address } = addressResult;
+
+    if (!address) {
+      throw new Error("Freighter wallet not connected or no address available");
+    }
+
+    // Create a wrapper for freighter.signTransaction that matches the SDK's expected signature
+    const signTransaction = async (
+      xdr: string,
+      opts?: { networkPassphrase?: string; address?: string },
+    ) => {
+      const result = await freighter.signTransaction(xdr, opts);
+      if (result.error) {
+        throw new Error(result.error.message || "Failed to sign transaction");
+      }
+      return {
+        signedTxXdr: result.signedTxXdr,
+        signerAddress: result.signerAddress,
+      };
+    };
+
+    const toDoContract = new Client({
+      contractId: networks.testnet.contractId,
+      networkPassphrase: networks.testnet.networkPassphrase,
+      rpcUrl: "https://soroban-testnet.stellar.org",
+      publicKey: address,
+      signTransaction: signTransaction,
+    });
+
+    return { contract: toDoContract, address };
+  } catch (err) {
+    console.error("Failed to initialize contract:", err);
+    throw new Error(
+      err instanceof Error
+        ? err.message
+        : "Failed to connect to Freighter wallet",
+    );
+  }
+}

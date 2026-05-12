@@ -21,7 +21,9 @@
     "paths": {
       "@/*": ["./*"],
       "to_do_list": ["./packages/to_do_list"],
-      "to_do_list/*": ["./packages/to_do_list/*"]
+      "to_do_list/*": ["./packages/to_do_list/*"],
+      "to_do_list_v2": ["./packages/to_do_list_v2"],
+      "to_do_list_v2/*": ["./packages/to_do_list_v2/*"]
     }
   },
   "include": [

@@ -1,5 +1,5 @@
 import * as freighter from "@stellar/freighter-api";
-import { Client, networks } from "to_do_list";
+import { Client, networks } from "to_do_list_v2";
 
 const ensureBrowser = () => {
   if (typeof window === "undefined") {

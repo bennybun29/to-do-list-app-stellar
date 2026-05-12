@@ -86,8 +86,8 @@ export async function initializeToDoContract() {
   };
 
   try {
-    // First check if Freighter is installed with timeout
-    await withTimeout(freighter.requestAccess(), 3000);
+    // Request access - wait for user interaction (no timeout, user controls timing)
+    await freighter.requestAccess();
   } catch (e) {
     console.error("Request access failed:", e);
     throw new Error(
@@ -96,6 +96,7 @@ export async function initializeToDoContract() {
   }
 
   try {
+    // Get address should respond immediately, use timeout for safety
     const addressResult = (await withTimeout(freighter.getAddress(), 3000)) as {
       address: string;
     };

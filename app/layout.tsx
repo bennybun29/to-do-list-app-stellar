@@ -3,6 +3,7 @@ import { Provider } from "@/components/ui/provider";
 import { Poppins } from "next/font/google";
 import { ToDoContractProvider } from "./context/ToDoContractContext";
 import GlobalWave from "./components/GlobalWave";
+import SpaceBackground from "./components/SpaceBackground";
 
 export const metadata: Metadata = {
   title: "To Do App",
@@ -25,6 +26,7 @@ export default function RootLayout({
         <ToDoContractProvider>
           <Provider>{children}</Provider>
           <GlobalWave />
+          <SpaceBackground />
         </ToDoContractProvider>
       </body>
     </html>

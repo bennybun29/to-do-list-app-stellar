@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useToDoContract } from "@/app/context/ToDoContractContext";
-import { TaskStatus } from "to_do_list";
+import { TaskStatus } from "to_do_list_v2";
 import ColorButton from "@/app/components/ColorButton";
 
 export default function Dashboard() {

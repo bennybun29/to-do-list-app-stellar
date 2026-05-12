@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter to_do_list build && next dev",
-    "build": "pnpm --filter to_do_list build && next build",
+    "dev": "pnpm --filter to_do_list_v2 build && next dev",
+    "build": "pnpm --filter to_do_list_v2 build && next build",
     "start": "next start",
     "lint": "eslint"
   },

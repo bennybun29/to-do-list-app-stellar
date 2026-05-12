@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Client, TaskItem, TaskStatus } from "to_do_list";
+import { Client, TaskItem, TaskStatus } from "to_do_list_v2";
 import { initializeToDoContract } from "@/app/lib/freighter";
 import { contractOps } from "@/app/services/contractService";
 
@@ -37,7 +37,7 @@ export const useTodoContract = () => {
     try {
       setLoading(true);
       setError(null);
-      const result = await contractOps.listTasks(client);
+      const result = await contractOps.listTasks(client, address!);
       setTasks(result);
     } catch (err) {
       const errorMessage =
@@ -54,7 +54,7 @@ export const useTodoContract = () => {
       try {
         setLoading(true);
         setError(null);
-        await contractOps.createTask(client, title);
+        await contractOps.createTask(client, address!, title);
         await loadTasks();
       } catch (err) {
         const errorMessage =
@@ -73,7 +73,7 @@ export const useTodoContract = () => {
       try {
         setLoading(true);
         setError(null);
-        await contractOps.setStatus(client, id, status);
+        await contractOps.setStatus(client, address!, id, status);
         await loadTasks();
       } catch (err) {
         const errorMessage =
@@ -92,7 +92,7 @@ export const useTodoContract = () => {
       try {
         setLoading(true);
         setError(null);
-        await contractOps.deleteTask(client, id);
+        await contractOps.deleteTask(client, address!, id);
         await loadTasks();
       } catch (err) {
         const errorMessage =
@@ -111,7 +111,7 @@ export const useTodoContract = () => {
       try {
         setLoading(true);
         setError(null);
-        await contractOps.updateTask(client, id, title, status);
+        await contractOps.updateTask(client, address!, id, title, status);
         await loadTasks();
       } catch (err) {
         const errorMessage =

@@ -24,6 +24,11 @@ export default function Home() {
       <VStack p={10} gap={5} justify="space-between">
         <LogoImage />
         <Heading>Welcome to StellarDo!</Heading>
+        <Box textAlign="center" maxW="md">
+          StellarDo is a decentralized to-do list application built on the
+          Stellar Network. Connect your Freighter wallet to manage your tasks
+          securely and efficiently.
+        </Box>
         <HStack my={3}>
           <FreighterConnectButton />
           <ColorButton />

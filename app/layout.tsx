@@ -21,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html suppressHydrationWarning>
-      <body className={poppins.className}>
+    <html suppressHydrationWarning lang="en">
+      <body className={poppins.className} suppressHydrationWarning>
         <ToDoContractProvider>
           <Provider>{children}</Provider>
           <GlobalWave />

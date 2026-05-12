@@ -14,17 +14,17 @@ export function ColorModeProvider({
   ...props
 }: ColorModeProviderProps) {
   return (
-    <ClientOnly>
-      <ThemeProvider
-        attribute="class"
-        disableTransitionOnChange
-        enableColorScheme={false}
-        storageKey="theme"
-        {...props}
-      >
-        {children}
-      </ThemeProvider>
-    </ClientOnly>
+    <ThemeProvider
+      attribute="class"
+      disableTransitionOnChange
+      enableColorScheme={false}
+      storageKey="theme"
+      enableSystem={false}
+      forcedTheme={undefined}
+      {...props}
+    >
+      <ClientOnly>{children}</ClientOnly>
+    </ThemeProvider>
   );
 }
 

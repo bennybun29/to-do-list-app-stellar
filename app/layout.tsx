@@ -7,7 +7,7 @@ import SpaceBackground from "./components/SpaceBackground";
 
 export const metadata: Metadata = {
   title: "SetllarDo",
-  description: "To do list applicatiuon using Stellar Network",
+  description: "To do list application using Stellar Network",
 };
 
 const poppins = Poppins({

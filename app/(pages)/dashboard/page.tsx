@@ -16,6 +16,7 @@ import {
 import NextLink from "next/link";
 import { useToDoContract } from "@/app/context/ToDoContractContext";
 import { TaskStatus } from "to_do_list";
+import ColorButton from "@/app/components/ColorButton";
 
 export default function Dashboard() {
   const {
@@ -100,33 +101,17 @@ export default function Dashboard() {
     backgroundColor: isDark ? "#2d3748" : "#ffffff",
   };
 
-  if (!connected) {
-    return (
-      <Container maxW="container.md" py={10}>
-        <Box
-          p={4}
-          bg="yellow.50"
-          borderRadius="md"
-          borderLeft="4px"
-          borderColor="yellow.500"
-        >
-          <Text>Please connect your wallet first</Text>
-        </Box>
-        <Button asChild mt={4} colorScheme="blue">
-          <NextLink href="/">Go Back</NextLink>
-        </Button>
-      </Container>
-    );
-  }
-
   return (
     <Container maxW="container.lg" py={10}>
       <VStack gap={6} align="stretch">
         <Flex justify="space-between" align="center">
           <Heading>My Tasks</Heading>
-          <Button asChild colorScheme="blue" size="sm">
-            <NextLink href="/">Go Back</NextLink>
-          </Button>
+          <HStack gap={2}>
+            <ColorButton />
+            <Button asChild colorScheme="blue" size="sm">
+              <NextLink href="/">Go Back</NextLink>
+            </Button>
+          </HStack>
         </Flex>
 
         {error && (

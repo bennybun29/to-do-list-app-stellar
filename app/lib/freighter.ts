@@ -86,13 +86,17 @@ export async function initializeToDoContract() {
   };
 
   try {
-    // Request access - wait for user interaction (no timeout, user controls timing)
-    await freighter.requestAccess();
+    // Request access with timeout - will fail quickly if extension is not installed
+    await withTimeout(freighter.requestAccess(), 5000);
   } catch (e) {
     console.error("Request access failed:", e);
-    throw new Error(
-      "Freighter wallet extension not found or not responding. Please install the Freighter wallet extension.",
-    );
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    if (errorMessage.includes("timed out")) {
+      throw new Error(
+        "Freighter wallet extension not found or not responding. Please install the Freighter wallet extension.",
+      );
+    }
+    throw e;
   }
 
   try {

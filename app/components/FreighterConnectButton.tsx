@@ -6,7 +6,8 @@ import { useToDoContract } from "@/app/context/ToDoContractContext";
 import { DialogBox } from "./Daialog";
 
 const FreighterConnectButton = () => {
-  const { connected, address, error, connect, loading } = useToDoContract();
+  const { connected, address, error, connect, loading, clearError } =
+    useToDoContract();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Show dialog when error occurs
@@ -20,13 +21,18 @@ const FreighterConnectButton = () => {
     await connect();
   };
 
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    clearError();
+  };
+
   return (
     <HStack gap={3} align="center">
       <DialogBox
         title="Freighter connection failed"
         desc={error || "Failed to connect"}
         isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
+        onClose={handleDialogClose}
       />
       <Button
         colorScheme="teal"
@@ -34,7 +40,7 @@ const FreighterConnectButton = () => {
         onClick={handleConnect}
         loading={loading}
         loadingText="Connecting"
-        disabled={connected}
+        disabled={connected || loading}
       >
         {connected ? "Freighter Connected" : "Connect Freighter"}
       </Button>

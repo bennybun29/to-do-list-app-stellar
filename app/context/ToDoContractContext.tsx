@@ -19,6 +19,7 @@ interface ToDoContractContextType {
   error: string | null;
   connected: boolean;
   connect: () => Promise<void>;
+  clearError: () => void;
   loadTasks: () => Promise<void>;
   addTask: (title: string) => Promise<void>;
   updateTask: (id: bigint, title: string, status: TaskStatus) => Promise<void>;
@@ -47,19 +48,26 @@ export function ToDoContractProvider({
     try {
       setLoading(true);
       setError(null);
+      console.log("Starting Freighter connection...");
       const { contract, address: walletAddress } =
         await initializeToDoContract();
+      console.log("Connection successful:", walletAddress);
       setClient(contract);
       setAddress(walletAddress);
       setConnected(true);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Connection failed";
+      console.error("Connection error:", errorMessage);
       setError(errorMessage);
       setConnected(false);
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  const clearError = useCallback(() => {
+    setError(null);
   }, []);
 
   const loadTasks = useCallback(async () => {
@@ -169,6 +177,7 @@ export function ToDoContractProvider({
         error,
         connected,
         connect,
+        clearError,
         loadTasks,
         addTask,
         updateTask,

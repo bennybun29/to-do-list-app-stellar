@@ -6,8 +6,8 @@ import GlobalWave from "./components/GlobalWave";
 import SpaceBackground from "./components/SpaceBackground";
 
 export const metadata: Metadata = {
-  title: "To Do App",
-  description: "Built with Chakra UI",
+  title: "SetllarDo",
+  description: "To do list applicatiuon using Stellar Network",
 };
 
 const poppins = Poppins({

@@ -75,40 +75,37 @@ export const connectFreighter = async () => {
 export async function initializeToDoContract() {
   ensureBrowser();
 
-  // Timeout wrapper for freighter calls
-  const withTimeout = <T>(promise: Promise<T>, ms: number = 3000) => {
-    return Promise.race([
-      promise,
-      new Promise<T>((_, reject) =>
-        setTimeout(() => reject(new Error("Freighter request timed out")), ms),
-      ),
-    ]);
-  };
-
   try {
-    // Request access with timeout - will fail quickly if extension is not installed
-    await withTimeout(freighter.requestAccess(), 5000);
-  } catch (e) {
-    console.error("Request access failed:", e);
-    const errorMessage = e instanceof Error ? e.message : String(e);
-    if (errorMessage.includes("timed out")) {
+    // Check if extension is installed first (immediate response)
+    const connectedResult = (await freighter.isConnected()) as {
+      isConnected?: boolean;
+    };
+
+    if (!connectedResult.isConnected) {
       throw new Error(
-        "Freighter wallet extension not found or not responding. Please install the Freighter wallet extension.",
+        "Freighter extension not found or not configured. Please install the Freighter wallet extension and set up your account.",
       );
     }
+
+    // Request access - wait for user interaction (no timeout, user controls timing)
+    await freighter.requestAccess();
+  } catch (e) {
+    console.error("Request access failed:", e);
     throw e;
   }
 
   try {
-    // Get address should respond immediately, use timeout for safety
-    const addressResult = (await withTimeout(freighter.getAddress(), 3000)) as {
+    // Get address should respond immediately
+    const addressResult = (await freighter.getAddress()) as {
       address: string;
     };
 
     const { address } = addressResult;
 
     if (!address) {
-      throw new Error("Freighter wallet not connected or no address available");
+      throw new Error(
+        "Please approve the request in the Freighter wallet popup.",
+      );
     }
 
     // Create a wrapper for freighter.signTransaction that matches the SDK's expected signature
